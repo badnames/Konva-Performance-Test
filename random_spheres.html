@@ -1,0 +1,73 @@
+<!-- Demo by Anton Lavrenov. Taken from https://codesandbox.io/p/sandbox/performance-test-r56sn8?file=%2Findex.html%3A1%2C1-67%2C1 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Random Spheres Test</title>
+    <script src="https://unpkg.com/konva@^9/konva.min.js"></script>
+</head>
+<body>
+<div id="container"></div>
+<script type="module">
+    import {layerCount, objectsPerLayer, repitions, useLayers} from './settings.js';
+    import Timer from './timer.js';
+
+    const stage = new Konva.Stage({
+        container: "container",
+        width: window.innerWidth,
+        height: window.innerHeight,
+    });
+
+    const circles = [];
+
+    let topParent = stage;
+    if (!useLayers) {
+        const layer = new Konva.Layer();
+        stage.add(layer);
+        topParent = layer;
+    }
+
+    for (var i = 0; i < layerCount; i++) {
+        let parent;
+        if (useLayers) {
+            parent = new Konva.Layer();
+        } else {
+            parent = new Konva.Group();
+        }
+        topParent.add(parent);
+        for (var j = 0; j < objectsPerLayer; j++) {
+            const shape = new Konva.Circle({
+                x: stage.width() / 2,
+                y: stage.height() / 2,
+                radius: 50,
+                fill: Konva.Util.getRandomColor(),
+            });
+            parent.add(shape);
+            circles.push(shape);
+        }
+    }
+
+    const text = new Konva.Text({
+        text: "useLayers - " + useLayers,
+        fontSize: 50,
+    });
+    stage.children[stage.children.length - 1].add(text);
+
+    const timer = new Timer();
+    timer.start();
+
+    for (let i = 0; i < repitions; i++) {
+        circles.forEach((circle) => {
+            circle.x(stage.width() * Math.random());
+            circle.y(stage.height() * Math.random());
+        });
+        timer.iteration();
+    }
+
+    console.log(timer.results);
+
+</script>
+</body>
+</html>

@@ -1,3 +1,4 @@
-export const layer_count = 40;
-export const objects_per_layer = 10;
+export const layerCount = 40;
+export const objectsPerLayer = 10;
 export const repitions = 1000;
+export const useLayers = false;
