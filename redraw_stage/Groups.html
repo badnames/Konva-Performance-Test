@@ -15,10 +15,9 @@
 </head>
 <body>
 <div id="container"></div>
-<script>
-    const group_count = 20;
-    const objects_per_layer = 10;
-    const repitions = 1000;
+<script type="module">
+    import {layer_count, objects_per_layer, repitions} from '../settings.js';
+    import Timer from '../timer.js';
 
     const width = window.innerWidth;
     const height = window.innerHeight;
@@ -33,7 +32,7 @@
     stage.add(layer);
 
     const groups = [];
-    for (let i = 0; i < group_count; i++) {
+    for (let i = 0; i < layer_count; i++) {
         const group = new Konva.Group();
 
         for (let j = 0; j < objects_per_layer; j++) {
@@ -82,21 +81,15 @@
         cornerRadius: 10,
     });
 
-    let averageTime = 0;
-    let maxTime = 0;
-    let minTime = Infinity;
-    const start = window.performance.now();
+    const timer = new Timer();
+    timer.start();
 
     for (let i = 0; i < repitions; i++) {
         stage.draw();
-
-        const delta = window.performance.now() - start;
-        maxTime = Math.max(maxTime, delta);
-        minTime = Math.min(minTime, delta);
-        averageTime = (averageTime + delta) / 2;
+        timer.iteration();
     }
 
-    console.log('Avg.:', averageTime, 'Max:', maxTime, 'Min:', minTime);
+    console.log(timer.results);
 </script>
 </body>
 </html>

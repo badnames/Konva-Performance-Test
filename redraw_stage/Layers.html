@@ -15,10 +15,9 @@
 </head>
 <body>
 <div id="container"></div>
-<script>
-    const layer_count = 30;
-    const objects_per_layer = 10;
-    const repitions = 1000;
+<script type="module">
+    import {layer_count, objects_per_layer, repitions} from '../settings.js';
+    import Timer from '../timer.js';
 
     const width = window.innerWidth;
     const height = window.innerHeight;
@@ -50,21 +49,15 @@
         layers.push(layer);
     }
 
-    let averageTime = 0;
-    let maxTime = 0;
-    let minTime = Infinity;
-    const start = window.performance.now();
+    const timer = new Timer();
+    timer.start();
 
     for (let i = 0; i < repitions; i++) {
         stage.draw();
-
-        const delta = window.performance.now() - start;
-        maxTime = Math.max(maxTime, delta);
-        minTime = Math.min(minTime, delta);
-        averageTime = (averageTime + delta) / 2;
+        timer.iteration();
     }
 
-    console.log('Avg.:', averageTime, 'Max:', maxTime, 'Min:', minTime);
+    console.log(timer.results);
 </script>
 </body>
 </html>
