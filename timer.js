@@ -1,3 +1,6 @@
+/**
+ * Keeps track of the maximum, minimum and average iteraion times of a loop.
+ */
 export default class Timer {
 
     constructor() {
@@ -8,10 +11,16 @@ export default class Timer {
         this.startTime = 0;
     }
 
+    /**
+     * Call this method immedeately before the firs loop iteration.
+     */
     start() {
         this.startTime = window.performance.now();
     }
 
+    /**
+     * Calling this method marks the end of an iteration.
+     */
     iteration() {
         const now = window.performance.now();
         const delta = now - this.startTime;
@@ -23,6 +32,10 @@ export default class Timer {
         this.startTime = window.performance.now();
     }
 
+    /**
+     * Retrieve all collected time statistics.
+     * @returns {{average: number, min: number, max: number}}
+     */
     get results() {
         return {
             max: this.maxTime,
